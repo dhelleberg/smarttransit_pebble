@@ -4,6 +4,7 @@ Window *s_main_window;
 
 static GBitmap *s_loading_bitmap;
 static BitmapLayer *s_bitmap_layer;
+static TextLayer *s_text_layer;
 	
 // Key values for AppMessage Dictionary
 enum {
@@ -65,13 +66,24 @@ static void main_window_load(Window *window) {
   s_bitmap_layer = bitmap_layer_create(bounds);
   bitmap_layer_set_bitmap(s_bitmap_layer, s_loading_bitmap);
   
+  s_text_layer = text_layer_create(GRect(0, bounds.size.h/2, bounds.size.w , bounds.size.h/2));
+  text_layer_set_text_color(s_text_layer, GColorWhite);
+  text_layer_set_background_color(s_text_layer, GColorClear);
+  text_layer_set_font(s_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
+  text_layer_set_text(s_text_layer, "Loading...");
+  text_layer_set_overflow_mode(s_text_layer, GTextOverflowModeWordWrap);
+  
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer));
+  layer_add_child(window_layer, text_layer_get_layer(s_text_layer));
+
+  
 }
 
 static void main_window_unload(Window *window) {
   bitmap_layer_destroy(s_bitmap_layer);
   gbitmap_destroy(s_loading_bitmap);
 
+  text_layer_destroy(s_text_layer);
 }
 
 void init(void) {
