@@ -1,0 +1,28 @@
+{
+    "appKeys": {
+        "message": 1,
+        "status": 0
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "dominik.helleberg@gmail.com",
+    "longName": "SmartTransit",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/pebble_load.png",
+                "name": "LOADING_IMAGE",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "SmartTransit",
+    "uuid": "53fbc69c-f7dd-4a49-aa5c-a8bc02bf00b2",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
