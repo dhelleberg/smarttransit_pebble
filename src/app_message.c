@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-Window *window;	
+Window *s_main_window;	
 
 static GBitmap *s_loading_bitmap;
 static BitmapLayer *s_bitmap_layer;
@@ -75,8 +75,18 @@ static void main_window_unload(Window *window) {
 }
 
 void init(void) {
-	window = window_create();
-	window_stack_push(window, true);
+	s_main_window = window_create();
+  #ifdef PBL_SDK_2
+    window_set_fullscreen(s_main_window, true);
+  #endif
+  
+  window_set_background_color(s_main_window, COLOR_FALLBACK(GColorBlue, GColorBlack));
+  window_set_window_handlers(s_main_window, (WindowHandlers) {
+    .load = main_window_load,
+    .unload = main_window_unload,
+  });
+  
+	window_stack_push(s_main_window, true);
 	
 	// Register AppMessage handlers
 	app_message_register_inbox_received(in_received_handler); 
@@ -85,15 +95,14 @@ void init(void) {
 		
 	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 	
-  window_set_click_config_provider(window, click_config_provider);
+  window_set_click_config_provider(s_main_window, click_config_provider);
 
 }
 
 void deinit(void) {
  
-  
 	app_message_deregister_callbacks();
-	window_destroy(window);
+	window_destroy(s_main_window);
 }
 
 int main( void ) {
