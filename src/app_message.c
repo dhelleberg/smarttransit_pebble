@@ -5,6 +5,7 @@ Window *s_main_window;
 static GBitmap *s_loading_bitmap;
 static BitmapLayer *s_bitmap_layer;
 static TextLayer *s_text_layer;
+static char status_text_buffer[] = "";
 	
 // Key values for AppMessage Dictionary
 enum {
@@ -22,6 +23,11 @@ void send_message(void){
 	dict_write_end(iter);
   app_message_outbox_send();
 }
+
+static void setStatusText(char *status_text_buffer) {
+	text_layer_set_text(s_text_layer, status_text_buffer);
+}
+
 
 // Called when a message is received from PebbleKitJS
 static void in_received_handler(DictionaryIterator *received, void *context) {
@@ -66,18 +72,19 @@ static void main_window_load(Window *window) {
   s_bitmap_layer = bitmap_layer_create(bounds);
   bitmap_layer_set_bitmap(s_bitmap_layer, s_loading_bitmap);
   
-  s_text_layer = text_layer_create(GRect(0, bounds.size.h/2, bounds.size.w , bounds.size.h/2));
+  s_text_layer = text_layer_create(GRect(0, bounds.size.h/2 + 20 , bounds.size.w , bounds.size.h/2-20));
   text_layer_set_text_color(s_text_layer, GColorWhite);
   text_layer_set_background_color(s_text_layer, GColorClear);
-  text_layer_set_font(s_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));
-  text_layer_set_text(s_text_layer, "Loading...");
+  text_layer_set_font(s_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24));  
+  text_layer_set_text_alignment(s_text_layer, GTextAlignmentCenter);
   text_layer_set_overflow_mode(s_text_layer, GTextOverflowModeWordWrap);
   
+  setStatusText("loading...");
   layer_add_child(window_layer, bitmap_layer_get_layer(s_bitmap_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_text_layer));
-
   
 }
+
 
 static void main_window_unload(Window *window) {
   bitmap_layer_destroy(s_bitmap_layer);
